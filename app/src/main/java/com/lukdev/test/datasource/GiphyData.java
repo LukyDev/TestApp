@@ -30,11 +30,8 @@ public class GiphyData extends RxPagingSource<Integer, GiphyTrending> {
                             Credentials.LANG
                     )
                     .subscribeOn(Schedulers.io())
-                    // Map result top List of movies
                     .map(GiphyTrending::getData)
-                    // Map result to LoadResult Object
                     .map(giphy -> toLoadResult(giphy, offset))
-                    // when error is there return error
                     .onErrorReturn(LoadResult.Error::new);
         }catch (Exception e){
             return Single.just(new LoadResult.Error(e));
