@@ -52,9 +52,17 @@ public class GiphyTrendingRequest {
     }
 
     public interface APIInterface {
-        @GET("{category}?")
+        @GET("trending")
         Single<com.lukdev.test.model.GiphyTrending> getCategoryGif(
-                @Path("category") String category,
+                @Query("limit") Integer limitSize,
+                @Query("offset") Integer offsetSize,
+                @Query("rating") String rating,
+                @Query("lang") String lang
+        );
+
+        @GET("search")
+        Single<com.lukdev.test.model.GiphyTrending> getSearchGif(
+                @Query("q") String query,
                 @Query("limit") Integer limitSize,
                 @Query("offset") Integer offsetSize,
                 @Query("rating") String rating,

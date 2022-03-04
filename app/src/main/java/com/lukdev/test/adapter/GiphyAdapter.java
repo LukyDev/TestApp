@@ -9,6 +9,7 @@ import androidx.paging.PagingDataAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lukdev.test.model.GiphyTrending;
 import com.lukdev.test.databinding.GyphiItemListBinding;
 
@@ -37,10 +38,9 @@ public class GiphyAdapter extends PagingDataAdapter<GiphyTrending.Datum, GiphyVi
     public void onBindViewHolder(@NonNull GiphyViewHolder holder, int position) {
         GiphyTrending.Datum item = getItem(position);
         Glide.with(holder.itemView.getContext())
-                .asGif()
-                .load(item.images.previewGif.url)
+                .load(item.images.original.webp)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.itemListBinding.giphyGif);
-        holder.itemListBinding.nameUser.setText(item.username);
 
     }
 

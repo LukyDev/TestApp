@@ -1,7 +1,8 @@
 package com.lukdev.test;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 
@@ -15,17 +16,18 @@ import android.view.MenuItem;
 import android.widget.SearchView;
 
 import com.lukdev.test.activity.FullScreenActivity;
-import com.lukdev.test.activity.SearchResultActivity;
 import com.lukdev.test.adapter.GiphyAdapter;
 import com.lukdev.test.adapter.GiphyLoadStateAdapter;
 import com.lukdev.test.adapter.OnGiphyClick;
 import com.lukdev.test.databinding.ActivityMainBinding;
 import com.lukdev.test.ui.GridSpace;
 import com.lukdev.test.viewmodel.MainActivityViewModel;
+import com.lukdev.test.viewmodel.SearchViewModel;
 
 public class MainActivity extends AppCompatActivity implements OnGiphyClick {
     ActivityMainBinding binding;
     private GiphyAdapter adapter;
+    String mQuery;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,18 +60,38 @@ public class MainActivity extends AppCompatActivity implements OnGiphyClick {
         });
     }
 
+    ViewModelProvider.Factory factory = new ViewModelProvider.Factory() {
+        @NonNull
+        @Override
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            return (T) new SearchViewModel(getApplication(), mQuery);
+        }
+    };
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search_action, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                mQuery = s;
+                if (s != null){
+                    binding.recyclerView.scrollToPosition(0);
+                    SearchViewModel viewModel = new ViewModelProvider(MainActivity.this, factory).get(s ,SearchViewModel.class);
+                    viewModel.pagingDataFlowable.subscribe(pagingData -> {
+                        adapter.submitData(getLifecycle(), pagingData);
+                    });
+                }
+                return false;
+            }
 
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        ComponentName componentName =
-                new ComponentName(getApplicationContext(), SearchResultActivity.class);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName));
-
-
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
         return true;
     }
 

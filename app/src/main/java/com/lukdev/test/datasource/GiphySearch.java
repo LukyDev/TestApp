@@ -1,8 +1,5 @@
 package com.lukdev.test.datasource;
 
-
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.paging.PagingState;
@@ -17,27 +14,35 @@ import java.util.List;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class GiphyData extends RxPagingSource<Integer, GiphyTrending> {
+public class GiphySearch  extends RxPagingSource<Integer, GiphyTrending> {
+
+    String mQuery;
+
+    public GiphySearch(String mQuery) {
+        this.mQuery = mQuery;
+    }
 
     @NonNull
     @Override
     public Single<LoadResult<Integer, GiphyTrending>> loadSingle(@NonNull LoadParams<Integer> loadParams) {
         int offset = loadParams.getKey() !=null ? loadParams.getKey() : 0;
-            try{
-                return GiphyTrendingRequest.getAPIInterface()
-                        .getCategoryGif(
-                                25,
-                                offset,
-                                "g",
-                                Credentials.LANG
-                        )
-                        .subscribeOn(Schedulers.io())
-                        .map(GiphyTrending::getData)
-                        .map(giphy -> toLoadResult(giphy, offset))
-                        .onErrorReturn(LoadResult.Error::new);
-            }catch (Exception e){
-                return Single.just(new LoadResult.Error(e));
-            }
+        try{
+            return GiphyTrendingRequest.getAPIInterface()
+                    .getSearchGif(
+                            mQuery,
+                            25,
+                            offset,
+                            "g",
+                            Credentials.LANG
+                    )
+                    .map(GiphyTrending::getData)
+                    .map(giphy -> toLoadResult(giphy, offset))
+                    .cache()
+                    .observeOn(Schedulers.newThread())
+                    .onErrorReturn(LoadResult.Error::new);
+        }catch (Exception e){
+            return Single.just(new LoadResult.Error(e));
+        }
 
     }
 
