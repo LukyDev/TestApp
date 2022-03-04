@@ -2,7 +2,6 @@ package com.lukdev.test.request;
 
 import static com.lukdev.test.utils.Credentials.URL_GIPHY;
 
-import com.lukdev.test.model.GiphyTrending;
 import com.lukdev.test.utils.Credentials;
 
 import io.reactivex.rxjava3.core.Single;
@@ -13,7 +12,6 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public class GiphyTrendingRequest {

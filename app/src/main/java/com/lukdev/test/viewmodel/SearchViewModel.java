@@ -2,17 +2,14 @@ package com.lukdev.test.viewmodel;
 
 import android.app.Application;
 
-import androidx.annotation.NonNull;
+
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelKt;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.paging.Pager;
 import androidx.paging.PagingConfig;
 import androidx.paging.PagingData;
 import androidx.paging.rxjava3.PagingRx;
 
-import com.lukdev.test.datasource.GiphyData;
 import com.lukdev.test.datasource.GiphySearch;
 import com.lukdev.test.model.GiphyTrending;
 

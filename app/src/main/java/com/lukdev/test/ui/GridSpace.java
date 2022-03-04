@@ -7,9 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class GridSpace extends RecyclerView.ItemDecoration {
-    private int mCount;
-    private int mSpace;
-    private boolean mEdge;
+    private final int mCount;
+    private final int mSpace;
+    private final boolean mEdge;
 
     public GridSpace(int mCount, int mSpace, boolean mEdge) {
         this.mCount = mCount;

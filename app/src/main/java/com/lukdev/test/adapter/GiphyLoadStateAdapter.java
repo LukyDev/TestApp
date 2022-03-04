@@ -17,7 +17,7 @@ import com.lukdev.test.databinding.LoadStateItemBinding;
 
 public class GiphyLoadStateAdapter extends LoadStateAdapter<GiphyLoadStateAdapter.LoadStateViewHolder> {
 
-    private View.OnClickListener mRetry;
+    private final View.OnClickListener mRetry;
 
     public GiphyLoadStateAdapter(View.OnClickListener mRetry) {
         this.mRetry = mRetry;
@@ -35,10 +35,10 @@ public class GiphyLoadStateAdapter extends LoadStateAdapter<GiphyLoadStateAdapte
     }
 
 
-    class LoadStateViewHolder extends RecyclerView.ViewHolder {
-        private ProgressBar mProgressBar;
-        private TextView mErrorMsg;
-        private Button mRetryButton;
+    public static class LoadStateViewHolder extends RecyclerView.ViewHolder {
+        private final ProgressBar mProgressBar;
+        private final TextView mErrorMsg;
+        private final Button mRetryButton;
 
         LoadStateViewHolder(
                 @NonNull ViewGroup parent,
@@ -50,6 +50,7 @@ public class GiphyLoadStateAdapter extends LoadStateAdapter<GiphyLoadStateAdapte
             mProgressBar = binding.giphyProgress;
             mErrorMsg = binding.giphyError;
             mRetryButton = binding.giphyButton;
+            mRetryButton.setOnClickListener(retryCallback);
         }
 
         public void bind(LoadState loadState) {

@@ -18,7 +18,7 @@ public class GiphyViewHolder extends RecyclerView.ViewHolder implements View.OnC
         this.onGiphyClick = onGiphyClick;
         this.itemListBinding = itemListBinding;
         itemListBinding.getRoot().setOnClickListener(
-                this::onClick
+                this
         );
     }
 

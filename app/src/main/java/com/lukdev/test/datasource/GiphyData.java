@@ -1,8 +1,6 @@
 package com.lukdev.test.datasource;
 
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.paging.PagingState;
@@ -34,6 +32,7 @@ public class GiphyData extends RxPagingSource<Integer, GiphyTrending> {
                         .subscribeOn(Schedulers.io())
                         .map(GiphyTrending::getData)
                         .map(giphy -> toLoadResult(giphy, offset))
+                        .cache()
                         .onErrorReturn(LoadResult.Error::new);
             }catch (Exception e){
                 return Single.just(new LoadResult.Error(e));

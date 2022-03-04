@@ -2,7 +2,6 @@ package com.lukdev.test.adapter;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.AdapterView.OnItemClickListener;
 
 import androidx.annotation.NonNull;
 import androidx.paging.PagingDataAdapter;
@@ -17,7 +16,7 @@ public class GiphyAdapter extends PagingDataAdapter<GiphyTrending.Datum, GiphyVi
 
     public static final int LOADING_ITEM = 0;
     public static final int GIPHY_ITEM = 1;
-    private OnGiphyClick onGiphyClick;
+    private final OnGiphyClick onGiphyClick;
 
     public GiphyAdapter(OnGiphyClick onGiphyClick) {
         super(DIFF_CALLBACK);
@@ -37,10 +36,12 @@ public class GiphyAdapter extends PagingDataAdapter<GiphyTrending.Datum, GiphyVi
     @Override
     public void onBindViewHolder(@NonNull GiphyViewHolder holder, int position) {
         GiphyTrending.Datum item = getItem(position);
-        Glide.with(holder.itemView.getContext())
-                .load(item.images.original.webp)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(holder.itemListBinding.giphyGif);
+        if (item != null){
+            Glide.with(holder.itemView.getContext())
+                    .load(item.images.original.webp)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(holder.itemListBinding.giphyGif);
+        }
 
     }
 
@@ -50,8 +51,7 @@ public class GiphyAdapter extends PagingDataAdapter<GiphyTrending.Datum, GiphyVi
     }
 
     public GiphyTrending.Datum getSelected(int position){
-        GiphyTrending.Datum item = getItem(position);
-        return item;
+        return getItem(position);
     }
 
 
