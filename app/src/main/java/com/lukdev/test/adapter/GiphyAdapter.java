@@ -38,7 +38,7 @@ public class GiphyAdapter extends PagingDataAdapter<GiphyTrending.Datum, GiphyVi
         GiphyTrending.Datum item = getItem(position);
         if (item != null){
             Glide.with(holder.itemView.getContext())
-                    .load(item.images.original.webp)
+                    .load(item.images.original.url)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.itemListBinding.giphyGif);
         }
